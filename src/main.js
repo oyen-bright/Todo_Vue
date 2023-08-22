@@ -1,4 +1,8 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from "vue";
+import App from "./App.vue";
+import FAB from "./components/UI/baseFAB.vue";
+import "./main.css";
 
-createApp(App).mount('#app')
+const app = createApp(App);
+app.component("base-fab", FAB);
+app.mount("#app");
