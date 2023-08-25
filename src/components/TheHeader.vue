@@ -1,9 +1,47 @@
 <template>
   <section class="content">
     <h1>What's Up,</h1>
-    <input class="input" type="text" placeholder="Name Here" />
+    <input class="input" type="text" placeholder="Name Here" v-model="name" />
   </section>
 </template>
+
+<script>
+export default {
+  emits: ["name-listener"],
+  props: ["userName"],
+  // data() {
+  //   return {
+  //     name: this.userName,
+  //   };
+  // },
+  // props: {
+  //   updatedName: {
+  //     required: true,
+  //   },
+  // },
+  // methods: {
+  //   emitName(){
+  //     this.$emit('name-listener', this.name)
+  //   }
+  // },
+  computed: {
+    name: {
+      get() {
+        return this.userName;
+      },
+      set(newValue) {
+        this.$emit("name-listener", newValue);
+      },
+    },
+  },
+
+  // watch: {
+  //   name: function (value) {
+  //     this.$emit("name-listener", value);
+  //   },
+  // },
+};
+</script>
 
 <style scoped>
 .content {

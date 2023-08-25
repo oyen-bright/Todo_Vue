@@ -3,24 +3,67 @@
     <h2>Create A todo</h2>
     <p>What's on your todo list?</p>
   </header>
-  <form action="   ">
+  <form @submit.prevent="addTodo" ref="form">
     <section>
-      <input type="text" placeholder="e.g make a video" class="todo-text" />
+      <input
+        type="text"
+        placeholder="e.g make a video"
+        class="todo-text"
+        ref="todoTitle"
+        required
+      />
       <div class="category-container">
         <p>Pick a category</p>
-        <div class="category">
-          <input type="radio" name="category" class="business" />
+        <label class="category">
+          <input
+            type="radio"
+            name="category"
+            required
+            class="business"
+            ref="radioBusiness"
+          />
           <h4>Business</h4>
-        </div>
-        <div class="category">
-          <input type="radio" name="category" class="business personal" />
+        </label>
+        <label class="category">
+          <input
+            type="radio"
+            required
+            name="category"
+            class="business personal"
+          />
           <h4>Personal</h4>
-        </div>
+        </label>
       </div>
       <button type="submit">Add Todo</button>
     </section>
   </form>
 </template>
+
+<script>
+export default {
+  emits: ["todo-listener"],
+  methods: {
+    getSelectedCategory() {
+      if (this.$refs.radioBusiness.checked) {
+        return "business";
+      } else {
+        return "personal";
+      }
+    },
+    addTodo() {
+      const todoTitle = this.$refs.todoTitle;
+      this.$emit("todo-listener", {
+        title: todoTitle.value,
+        category: this.getSelectedCategory(),
+        done: false,
+        editable: false,
+        createdAt: new Date().getTime(),
+      });
+      this.$refs.form.reset();
+    },
+  },
+};
+</script>
 
 <style scoped>
 section {
@@ -80,6 +123,7 @@ header p {
   margin-bottom: 0.5rem;
   font-size: var(--font-body-small);
 }
+
 .category h4 {
   margin: 0;
   width: 100%;
@@ -87,13 +131,36 @@ header p {
   font-weight: normal;
   font-size: var(--font-body-small);
 }
+
+.business:checked {
+  content: "";
+  display: block;
+  width: 20px;
+  height: 20px;
+  opacity: 1;
+  background-color: gold;
+  box-shadow: var(--business-glow);
+  border-radius: 50%;
+  transition: 0.2s ease-in-out;
+}
+
+.business.personal:checked {
+  display: block;
+  width: 20px;
+  height: 20px;
+  opacity: 1;
+  background-color: gold;
+  box-shadow: var(--personal-glow);
+  border-radius: 50%;
+  transition: 0.2s ease-in-out;
+}
 .category input[type="radio"] {
   appearance: none;
   cursor: pointer;
 }
 
 .business {
-  width: 20px; /* Set a specific width for better control */
+  width: 20px;
   height: 20px;
   border: 2px solid var(--business);
   box-shadow: var(--business-glow);
@@ -109,23 +176,6 @@ header p {
   box-shadow: var(--personal-glow);
 }
 
-.business::after {
-  content: "";
-  display: block;
-  width: 10px;
-  height: 10px;
-  opacity: 1;
-  background-color: var(--business);
-  box-shadow: var(--business-glow);
-  border-radius: 50%;
-  transition: 0.2s ease-in-out;
-}
-
-.business.personal::after {
-  background-color: var(--personal);
-  box-shadow: var(--personal-glow);
-}
-
 /* BUTTON SUBMIT - ADD TODO */
 button[type="Submit"] {
   width: 100%;
@@ -136,6 +186,7 @@ button[type="Submit"] {
   margin: 0;
   border: none;
   outline: none;
+  margin-bottom: 1rem;
 }
 
 button[type="Submit"]:hover {

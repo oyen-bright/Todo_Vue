@@ -24,9 +24,9 @@ export default {
 
 <style scoped>
 .fab-container {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
+  position: Fixed;
+  bottom: 5%;
+  right: 4%;
   cursor: pointer;
 }
 
