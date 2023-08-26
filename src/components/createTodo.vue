@@ -53,11 +53,11 @@ export default {
     addTodo() {
       const todoTitle = this.$refs.todoTitle;
       this.$emit("todo-listener", {
-        title: todoTitle.value,
+        title: todoTitle.value[0].toUpperCase() + todoTitle.value.slice(1),
         category: this.getSelectedCategory(),
         done: false,
         editable: false,
-        createdAt: new Date().getTime(),
+        createdDate: new Date().getTime(),
       });
       this.$refs.form.reset();
     },

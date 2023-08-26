@@ -1,12 +1,30 @@
 <template>
   <section>
     <p>Todo list</p>
-
     <ul>
-      <todo-tile v-for="index in 100" :key="index"></todo-tile>
+      <todo-tile
+        v-for="(todo, index) in tasks"
+        :key="index"
+        :title="todo.title"
+        :is-completed="todo.done"
+        :type="todo.category"
+        :created-date="todo.createdDate"
+        @click="deleteTodo(todo.createdDate)"
+      ></todo-tile>
     </ul>
   </section>
 </template>
+
+<script>
+export default {
+  props: ["tasks"],
+  methods: {
+    deleteTodo(createdData) {
+      this.$emit("onDelete", createdData);
+    },
+  },
+};
+</script>
 
 <style scoped>
 section p {

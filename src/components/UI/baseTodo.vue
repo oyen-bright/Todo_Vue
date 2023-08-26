@@ -1,13 +1,42 @@
 <template>
   <li>
     <div>
-      <input type="Radio" />
-      <p>TodoName</p>
+      <input type="Radio" :class="{ isBusiness: type == 'business' }" />
+      <p>{{ title }}</p>
     </div>
 
     <button>Delete</button>
   </li>
 </template>
+
+<script>
+export default {
+  emits: ["onDelete"],
+  props: {
+    title: {
+      type: String,
+      required: true,
+    },
+    isCompleted: {
+      type: Boolean,
+      required: true,
+    },
+    createdDate: {
+      type: Number,
+      required: true,
+    },
+    type: {
+      type: String,
+      required: true,
+    },
+  },
+  methods: {
+    onDelete(createdDate) {
+      this.$emit("onDelete", [createdDate]);
+    },
+  },
+};
+</script>
 
 <style scoped>
 li {
@@ -38,6 +67,11 @@ li div input[type="Radio"] {
   width: 20px;
   border: 2px solid var(--personal);
   box-shadow: var(--personal-glow);
+}
+
+li div input[type="Radio"].isBusiness {
+  border: 2px solid var(--business);
+  box-shadow: var(--business-glow);
 }
 
 li button {

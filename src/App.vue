@@ -2,7 +2,7 @@
   <section class="scaffold">
     <the-header @name-listener="updateName" :user-name="username"></the-header>
     <create-todo @todo-listener="updateTodo"></create-todo>
-    <todo-list></todo-list>
+    <todo-list :tasks="tasks" @on-delete="deleteTodo"></todo-list>
     <base-fab icon="fa-solid fa-plus" background-color="gold"></base-fab>
   </section>
 </template>
@@ -22,7 +22,14 @@ export default {
   data() {
     return {
       username: "",
+      tasks: [],
     };
+  },
+
+  watch: {
+    tasks: function (value) {
+      this.writeToLocalStorage(StorageKeys.todo, value);
+    },
   },
 
   methods: {
@@ -30,7 +37,11 @@ export default {
       this.writeToLocalStorage(StorageKeys.username, name);
     },
     updateTodo(newTodo) {
-      console.log(newTodo);
+      this.tasks = [newTodo, ...this.tasks];
+    },
+
+    deleteTodo(createdDate) {
+      this.tasks = this.tasks.filter((x) => x.createdDate != createdDate);
     },
     writeToLocalStorage(key, data) {
       localStorage.setItem(key, JSON.stringify(data));
@@ -46,6 +57,7 @@ export default {
 
   mounted() {
     this.username = this.readFromLocalStorage(StorageKeys.username) ?? "";
+    this.tasks = this.readFromLocalStorage(StorageKeys.todo) ?? [];
   },
 };
 </script>
